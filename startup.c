@@ -1,5 +1,7 @@
 #include <stdint.h>
 
+int main(void);
+
 void reset_handler     (void);
 void nmi_handler       (void) __attribute__ ((weak, alias("default_handler")));
 void hardfault_handler (void) __attribute__ ((weak, alias("default_handler")));
@@ -10,6 +12,7 @@ void svc_handler       (void) __attribute__ ((weak, alias("default_handler")));
 void debugmon_handler  (void) __attribute__ ((weak, alias("default_handler")));
 void pendsv_handler    (void) __attribute__ ((weak, alias("default_handler")));
 void systick_handler   (void) __attribute__ ((weak, alias("default_handler")));
+
 
 extern uint32_t _sdata;     /* Inicio da secao .data */
 extern uint32_t _edata;     /* Fim da secao .data */
@@ -46,7 +49,8 @@ void reset_handler()
    
   uint32_t size = (uint32_t)&_edata - (uint32_t)&_sdata;
   uint8_t *pDst = (uint8_t*)&_sdata;                      /* SRAM */
-  uint8_t *pSrc = (uint8_t*)&_etext;                      /* FLASH */
+  uint8_t *pSrc = (uint8_t*)0x08000000 + 0x1000;
+  //   uint8_t *pSrc = (uint8_t*)&_etext;                      /* FLASH */
   
   for(i = 0; i < size; i++)
   {
