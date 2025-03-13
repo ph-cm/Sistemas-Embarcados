@@ -6,19 +6,27 @@
 # prerequisites = .c file
 # recipe = command line to compile
 
+# Ferramentas do toolchain
+
 CC = arm-none-eabi-gcc
+
+# Arquivos a serem compilados
+
+SRCS = startup.c \
+        main.c
+
+#Flags do compilador e linker
+
 CFLAGS = -g -mcpu=cortex-m4 -mthumb -Wall -O0
 
-#Adicionando o all que adiciona dependencias para gerar todos os .o files
-all: startup.o main.o
+# Gera uma lista de arquivos objeto utilizando os arquivos fonte
 
-#Generalizando mais as regras, usando variaveis automaticas
-main.o: main.c
-	$(CC) -c $(CFLAGS) $< -o $@
+OBJS = $(patsubst %, %.o, $(basename $(SRCS)))
 
-startup.o: startup.c
+all: $(OBJS)
+
+%.o: %.c
 	$(CC) -c $(CFLAGS) $< -o $@
 
 clean:
 	rm -f *.o
-	
