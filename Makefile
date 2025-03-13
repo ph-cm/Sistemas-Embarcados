@@ -9,6 +9,11 @@
 # Ferramentas do toolchain
 
 CC = arm-none-eabi-gcc
+RM = rm -rf
+
+# Diretorios arquivos objeto serao salvos
+
+OBJDIR = build
 
 # Arquivos a serem compilados
 
@@ -21,12 +26,16 @@ CFLAGS = -g -mcpu=cortex-m4 -mthumb -Wall -O0
 
 # Gera uma lista de arquivos objeto utilizando os arquivos fonte
 
-OBJS = $(patsubst %, %.o, $(basename $(SRCS)))
+OBJS = $(patsubst %, $(OBJDIR)/%.o, $(basename $(SRCS)))
+
+# Cria diretorios onde serao armazenados arquivos objeto
+
+$(shell mkdir -p $(dir $(OBJS)) > /dev/null)
 
 all: $(OBJS)
 
-%.o: %.c
+$(OBJDIR)/%.o: %.c
 	$(CC) -c $(CFLAGS) $< -o $@
 
 clean:
-	rm -f *.o
+	$(RM) $(OBJDIR)
