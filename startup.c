@@ -1,5 +1,11 @@
 #include <stdint.h>
 
+#define SRAM_START  0x20000000U                  /* Inicio da SRAM CORTEX-M */
+#define SRAM_SIZE   (128U * 1024U)               /* Tam. SRAM STM32F411 128K */
+#define SRAM_END    ((SRAM_START) + (SRAM_SIZE)) /* Final da SRAM STM32F411 */
+
+#define STACK_START SRAM_END                     /* Inicio da Stack */
+
 int main(void);
 
 void reset_handler     (void);
@@ -20,6 +26,8 @@ extern uint32_t _la_data;   /* Endereco de carga na RAM da secao .data */
 
 extern uint32_t _sbss;      /* Inicio da secao .bss */
 extern uint32_t _ebss;      /* Fim da secao .bss */
+
+extern uint32_t _etext;     // End of .text section (provided by linker script)
 
 uint32_t vectors[] __attribute__((section(".isr_vectors"))) =
 {
@@ -49,8 +57,7 @@ void reset_handler()
    
   uint32_t size = (uint32_t)&_edata - (uint32_t)&_sdata;
   uint8_t *pDst = (uint8_t*)&_sdata;                      /* SRAM */
-  uint8_t *pSrc = (uint8_t*)0x08000000 + 0x1000;
-  //   uint8_t *pSrc = (uint8_t*)&_etext;                      /* FLASH */
+  uint8_t *pSrc = (uint8_t*)&_etext;                      /* FLASH */
   
   for(i = 0; i < size; i++)
   {

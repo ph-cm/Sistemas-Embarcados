@@ -41,6 +41,14 @@ all: $(OBJS)
 $(OBJDIR)/%.o: %.c $(DEPDIR)/%.d
 	$(CC) -c $(CFLAGS) $(DEPFLAGS) $< -o $@
 
+# Cria um novo target para cada arquivo de dependencia possivel
+
+$(DEPS):
+
+# Inclui conteudo dos arquivos de dependencia
+
+-include $(DEPS)
+
 .PHONY: clean
 clean:
 	$(RM) $(OBJDIR) $(DEPDIR)
