@@ -9,8 +9,9 @@
 CC = arm-none-eabi-gcc
 CFLAGS = -g -mcpu=cortex-m4 -mthumb -O0 -Wall
 
+#Generalizando mais as regras, usando variaveis automaticas
 main.o: main.c
-	$(CC) -c $(CFLAGS) main.c -o main.o
+	$(CC) -c $(CFLAGS) $< -o $@ 
 
 clean:
 	rm -f *.o
